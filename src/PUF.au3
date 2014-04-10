@@ -12,10 +12,9 @@
 #include <MsgBoxConstants.au3>
 
 Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
-TrayMenu()
 
 $debug = 0  ; Debug mode toggle
-$IniPath = StringFormat("%s\puf.ini",@ScriptDir) 	; Ini file within same dir as puf.exe
+$IniPath = StringFormat("%s\PUF.ini",@ScriptDir) 	; Ini file within same dir as puf.exe
 If FileExists($IniPath) Then
    $IniSectionNames = IniReadSectionNames($IniPath) 	; Read all section names from ini file
    ; $IniSectionNames is an array, $IniSectionNames[0] stores number of sections,
@@ -41,11 +40,7 @@ For $i = 1 To $IniSectionNames[0]
 Next
 
 
-
-;While 1 ; Waiting for invoke
-;    Sleep(100)
-;WEnd
-
+TrayMenu()
 
 Func _PUF()
    ; @HotKeyPressed records the last key(Registered with HotKeySet()) pressed

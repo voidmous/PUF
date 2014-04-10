@@ -44,7 +44,7 @@ Name=cmd.exe
 Path=C:\Windows\system32\cmd.exe
 ```
 As you can see, section name is set to hotkey name, each section has two keys
-`Name` (Program window title substring for window searching) and `Path` (Absolute path of executable file). Most importanly, do write the correct shortcut key name.
+`Name` (Program window title substring for window searching) and `Path` (Absolute path of executable file). Most importanly, do write the correct shortcut key name, see [Send key list](http://www.autoitscript.com/autoit3/docs/appendix/SendKeys.htm) for more information.
 
 ### Compilation
 
@@ -54,9 +54,39 @@ Run `makefile.bat` will generate `bin\PUF.exe`.
 
 * How to decide which key to bind?
 
+At first, there are [limitations](https://www.autoitscript.com/autoit3/docs/functions/HotKeySet.htm) of key binding with `HotKeySet()`:
+
+<table>
+  <tr>
+    <td style="width:15%">Ctrl+Alt+Delete</td>
+    <td style="width:85%">It is reserved by Windows</td>
+  </tr>
+  <tr>
+   <td>F12</td>
+   <td>It is also reserved by Windows, according to its API.</td>
+  </tr>
+  <tr>
+   <td>NumPad's Enter Key</td>
+   <td>Instead, use {Enter} which captures both Enter keys on the keyboard.</td>
+  </tr>
+  <tr>
+   <td>Win+B,D,E,F,L,M,R,U; and Win+Shift+M</td>
+   <td>These are built-in Windows shortcuts.  Note:  Win+B and Win+L might only be reserved on Windows XP and above.</td>
+  </tr>
+  <tr>
+   <td>Alt, Ctrl, Shift, Win</td>
+   <td>These are the modifier keys themselves!</td>
+  </tr>
+  <tr>
+   <td>Other</td>
+   <td>Any global hotkeys a user has defined using third-party software,  any combos of two or more "base keys" such as '{F1}{F2}', and any keys of the form '{LALT}' or '{ALTDOWN}'.</td>
+  </tr>
+</table>
+
 Install [Windows Hotkey Explorer](http://hkcmdr.anymania.com/) to see
 keys already bind.
 
 * How to choose Name?
+
 Watch the title column of the window, or use `ahkc/AU3_Spy.exe` to see
 more comprehensive properties.

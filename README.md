@@ -88,5 +88,5 @@ keys already bind.
 
 * How to choose Name?
 
-Watch the title column of the window, or use `ahkc/AU3_Spy.exe` to see
+Watch the title column of the window, or use `tool\Au3Info.exe` to see
 more comprehensive properties.

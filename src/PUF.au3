@@ -14,6 +14,7 @@
 Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
 
 $debug = 0  ; Debug mode toggle
+
 $IniPath = StringFormat("%s\PUF.ini",@ScriptDir) 	; Ini file within same dir as puf.exe
 If FileExists($IniPath) Then
    $IniSectionNames = IniReadSectionNames($IniPath) 	; Read all section names from ini file

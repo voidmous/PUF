@@ -9,6 +9,7 @@
 #ce ----------------------------------------------------------------------------
 #NoTrayIcon
 #include <TrayConstants.au3> ; Required for the $TRAY_CHECKED constant.
+#include <Misc.au3> ; Required by _IsPressed()
 #include <MsgBoxConstants.au3>
 
 Opt("TrayMenuMode", 3) ; The default tray menu items will not be shown and items are not checked when selected. These are options 1 and 2 for TrayMenuMode.
@@ -84,6 +85,10 @@ Func _PUF()
 EndFunc
 
 Func TrayMenu()
+   Local $mAdd = TrayCreateItem("Add")
+   TrayCreateItem("")
+   Local $mAddTemp = TrayCreateItem("AddTemp")
+   TrayCreateItem("")
    Local $mDebug = TrayCreateItem("Debug")
    TrayCreateItem("") ; Create a separator line.
    Local $mAbout = TrayCreateItem("About")
@@ -95,15 +100,37 @@ Func TrayMenu()
 
    While 1
       Switch TrayGetMsg()
+         Case $mAddTemp
+            $confirm = 1
+            $mouseClicked = 0
+            MsgBox(4096,"","Click(activate) the temporary window you want to add, you may use CTRL+TAB")
+            While $confirm
+               If _IsPressed("01") Then   ; If left mouse is clicked, then get the window handle
+                  $AddTempHandle = WinGetHandle("") ; Return the handle of currently active window
+                  $choice = MsgBox($MB_CANCELTRYCONTINUE, "", "Window Handle: " & $AddTempHandle & _
+                     @CRLF & "Window Title: " & WinGetTitle($AddTempHandle) & @CRLF & _
+                     "Is it right?") ; Make sure right window is choosen
+                  If $choice = 11 Then ; Choice is right, continue
+                     $confirm = 0
+                     If $debug Then
+                        MsgBox(4096, "", "Choosen window is :" & WinGetTitle($AddTempHandle))
+                     Endif
+                  Elseif $choice = 10 Then ; Choice is wrong, try again
+                  $confirm = 1
+                  Else ; Cancel
+                  $confirm = 0
+                  Endif
+               Endif
+            Wend
          Case $mDebug
          ; Toggle debug mode
-         $debug = not $debug
-         If $debug Then
-            MsgBox(4096, "", "Debug mode is on")
-         Else 
-            MsgBox(4096, "", "Debug mode is off")
-         EndIF
-         Case $mAbout 
+            $debug = not $debug
+            If $debug Then
+               MsgBox(4096, "", "Debug mode is on")
+            Else 
+               MsgBox(4096, "", "Debug mode is off")
+            EndIF
+         Case $mAbout
          ; Display a message box about the AutoIt version and installation path of the AutoIt executable.
             MsgBox($MB_SYSTEMMODAL, "", "Pup Up Framework" & @CRLF & @CRLF & _
             "By: voidmous#gmail.com" & @CRLF & _

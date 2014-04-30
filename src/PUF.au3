@@ -38,8 +38,8 @@ Else
    IniWrite($IniPath, "{f7}", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
    IniWrite($IniPath, "{f8}", "Name", "cmd.exe")    ; Write default info into ini file
    IniWrite($IniPath, "{f8}", "Path", "C:\Windows\system32\cmd.exe")
-   IniWrite($IniPath, "{rwin}", "Name", "emacs")
-   IniWrite($IniPath, "{rwin}", "Path", "C:\cygwin\bin\emacs-w32.exe")
+   IniWrite($IniPath, "{f9}", "Name", "emacs")
+   IniWrite($IniPath, "{f9}", "Path", "C:\cygwin\bin\emacs-w32.exe")
    $IniSectionNames = IniReadSectionNames($IniPath)
 EndIf
 ; Read all hotkeys and bind to _PUF function

@@ -52,9 +52,10 @@ Run `makefile.bat` will generate `bin\PUF.exe`.
 
 ## FAQ
 
-* How to decide which key to bind?
+### How to decide which key to bind?
 
-At first, there are [limitations](https://www.autoitscript.com/autoit3/docs/functions/HotKeySet.htm) of key binding with `HotKeySet()`:
+Bad news is, AuotItV3 is not as powerful as AHKv2 when it comes to key binding.
+At first, there are official [limitations](https://www.autoitscript.com/autoit3/docs/functions/HotKeySet.htm) of key binding with `HotKeySet()`:
 
 <table>
   <tr>
@@ -83,10 +84,20 @@ At first, there are [limitations](https://www.autoitscript.com/autoit3/docs/func
   </tr>
 </table>
 
-Install [Windows Hotkey Explorer](http://hkcmdr.anymania.com/) to see
-keys already bind.
+Besides, AutoItV3 may not recognize some special keys especially in a laptop 
+PC such as `Fn` (although most `Fn` function keys can be identified). `Menu` key
+alone can't be bound neither. More about keys recognizable, see
+[built-in _IsPressed](http://www.autoitscript.com/autoit3/docs/libfunctions/_IsPressed.htm)
+and [IsPressed_UDF](http://www.autoitscript.com/forum/topic/86296-ispressed-udf-v23-advanced-keypress/)
 
-* How to choose Name?
+Install [Windows Hotkey Explorer](http://hkcmdr.anymania.com/) to see
+keys which have already been bound.
+
+If you don't know the key name, take a quick look at 
+[Send("keys")](https://www.autoitscript.com/autoit3/docs/functions/Send.htm).
+
+
+### How to choose Name?
 
 Watch the title column of the window, or use `tool\Au3Info.exe` to see
 more comprehensive properties.

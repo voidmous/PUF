@@ -35,10 +35,13 @@ If FileExists($IniPath) Then
 Else
    MsgBox(4096, "", "PUF.ini not found, using default.")
    IniWrite($IniPath, "{f7}", "Name", "Xshell") 	; Write default info into ini file
+   IniWrite($IniPath, "{f7}", "Class", "Xshell4:MainWnd")
    IniWrite($IniPath, "{f7}", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
    IniWrite($IniPath, "{f8}", "Name", "cmd.exe")    ; Write default info into ini file
+   IniWrite($IniPath, "{f8}", "Class", "ConsoleWindowClass")
    IniWrite($IniPath, "{f8}", "Path", "C:\Windows\system32\cmd.exe")
    IniWrite($IniPath, "{f9}", "Name", "emacs")
+   IniWrite($IniPath, "{f9}", "Class", "Emacs")
    IniWrite($IniPath, "{f9}", "Path", "C:\cygwin\bin\emacs-w32.exe")
    $IniSectionNames = IniReadSectionNames($IniPath)
 EndIf
@@ -66,31 +69,58 @@ Func _PUF()
    Else
       For $i = 1 To $section[0][0]
          If $section[$i][0] = "Name" Then
-            Local $AppTitle = $section[$i][1]   ; Search and set local variable $Apptitle
+            Local $AppTitle = $section[$i][1]   ; Search and set local variable $AppTitle
+         EndIf
+         If $section[$i][0] = "Class" Then
+            Local $AppClass = $section[$i][1]   ; Search and set local variable $AppClass
          EndIf
          If $section[$i][0] =  "Path" Then
             Local $AppExePath = $section[$i][1]    ; Search and set local variable $AppExePath
          EndIf
       Next
    EndIf
+   If $DEBUGFLAG Then
+      MsgBox(4096,"", $AppTitle & $AppClass & $AppExePath)
+   EndIF
 
-   ;Opt("WinTitleMatchMode",4) ; Advanced matching mode, handle and class supported
-   Opt("WinTitleMatchMode", 2) ; Substring matching mode
-   If WinExists($AppTitle) Then  ; An instance is running
-	   If $DEBUGFLAG Then
-		   MsgBox(4096,"AutoIt Debug","An instance is running, switch its status now.")
-	   EndIf
-      If WinActive($AppTitle) Then
-         WinSetState($AppTitle, "", @SW_MINIMIZE)  ; If window is avtive, then minimize it
+   ; Opt("WinTextMatchMode",2) ; Quick text searching mode
+   Opt("WinTitleMatchMode",4)
+   ; Advanced matching mode, handle, class and title supported
+   ; '-4' instead of '4' denotes case insensitive matching
+   ; 1=startstr, 2=substr, 3=exact, 4=advanced, -1 to -4=nocase
+   ; CLASS matching with priority, TITLE matching at 2nd place
+   If WinExists("[CLASS:" & $AppClass & "]") Then
+      Local $hWND = WinGetHandle("[CLASS:" & $AppClass & "]")
+      If $DEBUGFLAG Then
+	     MsgBox(4096,"AutoIt Debug","An window " & $hWND & "is found by Class")
+	  EndIf
+      If WinActive($hWND) Then
+         WinSetState($hWND, "", @SW_MINIMIZE)  ; If window is avtive, then minimize it
       Else
-         WinActivate($AppTitle) ; If window is not active, then activate it
+         WinActivate($hWND) ; If window is not active, then activate it
       EndIf
    Else
-	   If $DEBUGFLAG Then
-		   MsgBox(4096,"AutoIt Debug","No instance running, start one now.")
-	   EndIf
-	   Run($AppExePath)
-	   WinWait($AppTitle)
+      Opt("WinTitleMatchMode",2) ; Matching title with mode 2
+      If $DEBUGFLAG Then
+         MsgBox(4096, "", "No window found by Class")
+      EndIf
+      If WinExists($AppTitle) Then
+         Local $hWND = WinGetHandle($AppTitle)
+         If $DEBUGFLAG Then
+		   MsgBox(4096,"AutoIt Debug","An window " & $hWND & "is found by title")
+	     EndIf
+         If WinActive($hWND) Then
+            WinSetState($hWND, "", @SW_MINIMIZE)  ; If window is avtive, then minimize it
+         Else
+            WinActivate($hWND) ; If window is not active, then activate it
+         EndIf
+      Else
+         If $DEBUGFLAG Then
+		    MsgBox(4096,"AutoIt Debug","No instance running, start one now.")
+	     EndIf
+	     Run($AppExePath)
+	     WinWait("[TITLE:$AppTitle]")
+      EndIf
    EndIf
 
 EndFunc

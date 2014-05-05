@@ -13,7 +13,7 @@ endif
 	$(CC) /in $(SRC) /out $(EXEC) /icon $(ICO)
 
 clean:
-	rm bin/ pkg/ -r
+	rm -rf bin/ pkg/
 
 install: bin
 	cp -f $(EXEC) "$(INSTALLDIR)"

@@ -6,10 +6,10 @@ PUF is Pop Up Framework, which intends to pop up desired program window with key
 shortcut. PUF is inspired by [cyg-hotkey](https://bitbucket.org/riverscn/cyg-hotkey)
  and "steals" some code from it too. 
  
-I've implemented PUF with 2 script languages: 
-[*`AutoIt v3`*](https://github.com/voidmous/PUF/tree/au3-devel) and 
-[*`AutoHotKey_L`*](https://github.com/voidmous/PUF/tree/ahk-devel), 
-partly in order to compare their features.
+I've implemented PUF with 2 script languages, partly in order to compare their
+features:
+* [*AutoIt v3 Implementation*](https://github.com/voidmous/PUF/tree/au3-devel)
+* [*AutoHotKey_L Implementation*](https://github.com/voidmous/PUF/tree/ahk-devel)
 
 Here are my comments on them:
 

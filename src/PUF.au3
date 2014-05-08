@@ -13,15 +13,30 @@
 #include <lib/TrayConstants.au3>    ; Required for the $TRAY_CHECKED constant.
 #include <lib/Misc.au3>             ; Required by _IsPressed()
 #include <lib/MsgBoxConstants.au3>
+#include <lib/Array.au3>
+
 
 Opt("TrayMenuMode", 3)
 ; The default tray menu items will not be shown and items are not checked
 ; when selected. These are options 1 and 2 for TrayMenuMode.
 
-$DEBUGFLAG = 0  ; Debug mode toggle
+GLobal $DEBUGFLAG = 0  ; Debug mode toggle
 
-$IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
+Global $IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
 ; Ini file is kept within same dir as PUF.exe
+
+Global $hDLL = DllOpen("user32.dll")
+Global $ExtKeys[]=[	 "5B", _ ;   5B Left Windows key
+					 "5C", _ ;   5C Right Windows key
+					 "A0", _ ;   A0 Left SHIFT key
+					 "A1", _ ;   A1 Right SHIFT key
+					 "A2", _ ;   A2 Left CONTROL key
+					 "A3", _ ;   A3 Right CONTROL key
+					 "A4", _ ;   A4 Left MENU key
+					 "A5"  	 ;   A5 Right MENU key
+				  ]
+; Extended keys which cannot bind by HotKeySet() yet recognizable by _IsPressed()
+; http://www.autoitscript.com/autoit3/docs/libfunctions/_IsPressed.htm
 
 ; Read cfg file "PUF.ini" orelse write default configuration
 If Not FileExists($IniPath) Then
@@ -47,10 +62,17 @@ For $i = 1 To $IniSectionNames[0]
    If $DEBUGFLAG Then
    MsgBox(4096, "AutoIt Debug", StringFormat("Key No. %d is %s", $i, $AppKeyBind))
    EndIf
-   HotKeySet($AppKeyBind, "_PUF")   ; Bind the keyboard shortcut
+   $Index = _ArraySearch($ExtKeys, $AppKeyBind)
+   If  $Index == -1 Then
+	  HotKeySet($AppKeyBind, "_PUF")
+   Else
+	  ; Extended keys should not bind with HotKeySet()
+	  ; TODO
+   EndIf
 Next
 
 TrayMenu()
+
 
 Func _PUF()
    ; @HotKeyPressed records the last key(Registered with HotKeySet()) pressed
@@ -59,25 +81,20 @@ Func _PUF()
    ;MsgBox(4096, "AutoIt Debug", @HotKeyPressed)
    $AppKeyBind=@HotKeyPressed
    $Section=IniReadSection($IniPath,$AppKeyBind)   ; Read value of section @HotKeyPressed
-   If @error Then
-    MsgBox(4096, "", "Error, ini file may not be valid")
-   Else
-      For $i = 1 To $section[0][0]
-         If $section[$i][0] = "Name" Then
-            Local $AppTitle = $section[$i][1]   ; Search and set local variable $AppTitle
-         EndIf
-         If $section[$i][0] = "Class" Then
-            Local $AppClass = $section[$i][1]   ; Search and set local variable $AppClass
-         EndIf
-         If $section[$i][0] =  "Path" Then
-            Local $AppExePath = $section[$i][1]    ; Search and set local variable $AppExePath
-         EndIf
-      Next
-   EndIf
+   For $i = 1 To $Section[0][0]
+	  If $section[$i][0] = "Name" Then
+		 Local $AppTitle = $section[$i][1]   ; Search and set local variable $AppTitle
+	  EndIf
+	  If $section[$i][0] = "Class" Then
+		 Local $AppClass = $section[$i][1]   ; Search and set local variable $AppClass
+	  EndIf
+	  If $section[$i][0] =  "Path" Then
+		 Local $AppExePath = $section[$i][1]    ; Search and set local variable $AppExePath
+	  EndIf
+   Next
    If $DEBUGFLAG Then
       MsgBox(4096,"", $AppTitle & $AppClass & $AppExePath)
    EndIF
-
    ; Opt("WinTextMatchMode",2) ; Quick text searching mode
    Opt("WinTitleMatchMode",4)
    ; Advanced matching mode, handle, class and title supported
@@ -117,8 +134,8 @@ Func _PUF()
 	     WinWait($AppTitle)
       EndIf
    EndIf
-
 EndFunc
+
 
 Func TrayMenu()
    Local $mAdd = TrayCreateItem("Add")

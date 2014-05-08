@@ -1,8 +1,9 @@
 SRC = src/PUF.ahk
 EXEC = bin/PUF.exe
 CC = tool/Ahk2Exe.exe
-ICO = res/greencloud.ico
-INSTALLDIR = $(shell cygpath -P)/Startup/
+ICO = res/shield_and_swords.ico
+# INSTALLDIR = $(shell cygpath -P)/Startup/ # Windows启动文件夹
+INSTALLDIR = $(shell cygpath D\:/Program\ Files/PUF/)
 SHA1 = $(shell git rev-parse HEAD)
 BRANCHN =$(SHA1)_$(shell date +%F-%H%M%S)
 
@@ -10,7 +11,7 @@ bin:
 ifeq ($(wildcard bin),)
 	@mkdir bin
 endif
-	$(CC) /in $(SRC) /out $(EXEC) /icon $(ICO)
+	$(CC) /in $(SRC) /out $(EXEC) /icon $(ICO) /bin tool/AutoHotkeySC.bin
 
 clean:
 	rm -rf bin/ pkg/

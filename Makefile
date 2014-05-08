@@ -1,6 +1,6 @@
-SRC = src/PUF.au3
+SRC = src/PUF.ahk
 EXEC = bin/PUF.exe
-CC = tool/Aut2exe.exe
+CC = tool/Ahk2Exe.exe
 ICO = res/greencloud.ico
 INSTALLDIR = $(shell cygpath -P)/Startup/
 SHA1 = $(shell git rev-parse HEAD)
@@ -22,6 +22,6 @@ package:
 ifeq ($(wildcard pkg),)
 	@mkdir pkg
 endif
-	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src bin tool/Au3Info.exe LICENSE README.md
+	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src bin tool/Au3_Spy.exe LICENSE README.md
 
 all: bin package

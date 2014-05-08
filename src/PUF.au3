@@ -26,15 +26,15 @@ Global $IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
 ; Ini file is kept within same dir as PUF.exe
 
 Global $hDLL = DllOpen("user32.dll")
-Global $ExtKeys[]=[	 "5B", _ ;   5B Left Windows key
-					 "5C", _ ;   5C Right Windows key
-					 "A0", _ ;   A0 Left SHIFT key
-					 "A1", _ ;   A1 Right SHIFT key
-					 "A2", _ ;   A2 Left CONTROL key
-					 "A3", _ ;   A3 Right CONTROL key
-					 "A4", _ ;   A4 Left MENU key
-					 "A5"  	 ;   A5 Right MENU key
-				  ]
+Global $ExtKeys[]=["5B", "5C", "A0", "A1", "A2", "A3", "A4", "A5"]
+   ;   5B Left Windows key
+   ;   5C Right Windows key
+   ;   A0 Left SHIFT key
+   ;   A1 Right SHIFT key
+   ;   A2 Left CONTROL key
+   ;   A3 Right CONTROL key
+   ;   A4 Left MENU key
+   ;   A5 Right MENU key
 ; Extended keys which cannot bind by HotKeySet() yet recognizable by _IsPressed()
 ; http://www.autoitscript.com/autoit3/docs/libfunctions/_IsPressed.htm
 
@@ -42,15 +42,15 @@ Global $ExtKeys[]=[	 "5B", _ ;   5B Left Windows key
 If Not FileExists($IniPath) Then
    ; If file does not exist, creat one
    MsgBox(4096, "", "PUF.ini not found, using default.")
-   IniWrite($IniPath, "^x", "Name", "Xshell") 	; Write default info into ini file
-   IniWrite($IniPath, "^x", "Class", "Xshell4:MainWnd")
-   IniWrite($IniPath, "^x", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
-   IniWrite($IniPath, "^m", "Name", "bash")
-   IniWrite($IniPath, "^m", "Class", "mintty")
-   IniWrite($IniPath, "^m", "Path", "C:\cygwin\bin\mintty -")
-   IniWrite($IniPath, "^e", "Name", "emacs")
-   IniWrite($IniPath, "^e", "Class", "Emacs")
-   IniWrite($IniPath, "^e", "Path", "C:\cygwin\bin\emacs-w32.exe")
+   IniWrite($IniPath, "^q", "WinTitle", "Xshell") 	; Write default info into ini file
+   IniWrite($IniPath, "^q", "WinClass", "Xshell4:MainWnd")
+   IniWrite($IniPath, "^q", "ExePath", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
+   IniWrite($IniPath, "^m", "WinName", "bash")
+   IniWrite($IniPath, "^m", "WinClass", "mintty")
+   IniWrite($IniPath, "^m", "ExePath", "C:\cygwin\bin\mintty -")
+   IniWrite($IniPath, "^e", "WinName", "emacs")
+   IniWrite($IniPath, "^e", "WinClass", "Emacs")
+   IniWrite($IniPath, "^e", "ExePath", "C:\cygwin\bin\emacs-w32.exe")
 EndIf
 $IniSectionNames = IniReadSectionNames($IniPath)
 ; Read all section names from ini file. $IniSectionNames is an array.
@@ -71,9 +71,11 @@ For $i = 1 To $IniSectionNames[0]
    EndIf
 Next
 
+; TrayMenu() contains a infinite-while-loop
+; Has to be put in the end
 TrayMenu()
 
-
+; Must be called not processed, hence behind a infinite-loop
 Func _PUF()
    ; @HotKeyPressed records the last key(Registered with HotKeySet()) pressed
    ; More about @HotKeyPressed, see website:
@@ -82,13 +84,13 @@ Func _PUF()
    $AppKeyBind=@HotKeyPressed
    $Section=IniReadSection($IniPath,$AppKeyBind)   ; Read value of section @HotKeyPressed
    For $i = 1 To $Section[0][0]
-	  If $section[$i][0] = "Name" Then
+	  If $section[$i][0] = "WinTitle" Then
 		 Local $AppTitle = $section[$i][1]   ; Search and set local variable $AppTitle
 	  EndIf
-	  If $section[$i][0] = "Class" Then
+	  If $section[$i][0] = "WinClass" Then
 		 Local $AppClass = $section[$i][1]   ; Search and set local variable $AppClass
 	  EndIf
-	  If $section[$i][0] =  "Path" Then
+	  If $section[$i][0] =  "ExePath" Then
 		 Local $AppExePath = $section[$i][1]    ; Search and set local variable $AppExePath
 	  EndIf
    Next
@@ -190,6 +192,7 @@ Func TrayMenu()
             "Version: " & @AutoItVersion & @CRLF & _
             "Install Path: " & StringLeft(@AutoItExe, StringInStr(@AutoItExe, "\", 0, -1) - 1))
          Case $mExit ; Exit the loop.
+			Dllclose($hDLL)
             ExitLoop
       EndSwitch
     WEnd

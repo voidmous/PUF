@@ -2,7 +2,8 @@ SRC = src/PUF.au3
 EXEC = bin/PUF.exe
 CC = tool/Aut2exe.exe
 ICO = res/shield_and_swords.ico
-INSTALLDIR = $(shell cygpath -P)/Startup/
+# INSTALLDIR = $(shell cygpath -P)/Startup/ # Windows启动文件夹
+INSTALLDIR = $(shell cygpath -u D\:/Program\ Files/PUF/)
 SHA1 = $(shell git rev-parse HEAD)
 BRANCHN =$(SHA1)_$(shell date +%F-%H%M%S)
 

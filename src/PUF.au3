@@ -19,32 +19,29 @@ Opt("TrayMenuMode", 3)
 ; when selected. These are options 1 and 2 for TrayMenuMode.
 
 $DEBUGFLAG = 0  ; Debug mode toggle
+$hUser32 = DllOpen("user32.dll")
 
 $IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
 ; Ini file is kept within same dir as PUF.exe
 
-; Read cfg file "PUF.ini" or write default configuration
-If FileExists($IniPath) Then
-   $IniSectionNames = IniReadSectionNames($IniPath)
-   ; Read all section names from ini file. $IniSectionNames is an array.
-   ; $IniSectionNames[0] stores number of sections,
-   ; $IniSectionNames[1]--$IniSectionNames[$IniSectionNames[0]] store names of sections.
-   If @error Then
-	  MsgBox(4096, "", "Error, ini file may not be valid")
-   EndIf
-Else
+; Read cfg file "PUF.ini" orelse write default configuration
+If Not FileExists($IniPath) Then
+   ; If file does not exist, creat one
    MsgBox(4096, "", "PUF.ini not found, using default.")
    IniWrite($IniPath, "{f7}", "Name", "Xshell") 	; Write default info into ini file
    IniWrite($IniPath, "{f7}", "Class", "Xshell4:MainWnd")
    IniWrite($IniPath, "{f7}", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
-   IniWrite($IniPath, "{f8}", "Name", "cmd.exe")    ; Write default info into ini file
+   IniWrite($IniPath, "{f8}", "Name", "cmd.exe")
    IniWrite($IniPath, "{f8}", "Class", "ConsoleWindowClass")
    IniWrite($IniPath, "{f8}", "Path", "C:\Windows\system32\cmd.exe")
    IniWrite($IniPath, "{f9}", "Name", "emacs")
    IniWrite($IniPath, "{f9}", "Class", "Emacs")
    IniWrite($IniPath, "{f9}", "Path", "C:\cygwin\bin\emacs-w32.exe")
-   $IniSectionNames = IniReadSectionNames($IniPath)
 EndIf
+$IniSectionNames = IniReadSectionNames($IniPath)
+; Read all section names from ini file. $IniSectionNames is an array.
+; $IniSectionNames[0] stores number of sections,
+; $IniSectionNames[1]--$IniSectionNames[$IniSectionNames[0]] store names of sections.
 ; Read all hotkeys and bind to _PUF function
 For $i = 1 To $IniSectionNames[0]
    $AppKeyBind = $IniSectionNames[$i] ; Read all keys and bind to function _PUF()
@@ -53,7 +50,6 @@ For $i = 1 To $IniSectionNames[0]
    EndIf
    HotKeySet($AppKeyBind, "_PUF")   ; Bind the keyboard shortcut
 Next
-
 
 TrayMenu()
 

@@ -7,8 +7,8 @@ shortcut. PUF is inspired by [cyg-hotkey](https://bitbucket.org/riverscn/cyg-hot
  and "steals" some code from it too. 
  
 I've implemented PUF with 2 script languages: 
-[`AutoIt v3`](https://github.com/voidmous/PUF/tree/au3-devel) and 
-[`AutoHotKey_L`](https://github.com/voidmous/PUF/tree/ahk-devel), 
+[*`AutoIt v3`*](https://github.com/voidmous/PUF/tree/au3-devel) and 
+[*`AutoHotKey_L`*](https://github.com/voidmous/PUF/tree/ahk-devel), 
 partly in order to compare their features.
 
 Here are my comments on them:

@@ -19,7 +19,6 @@ Opt("TrayMenuMode", 3)
 ; when selected. These are options 1 and 2 for TrayMenuMode.
 
 $DEBUGFLAG = 0  ; Debug mode toggle
-$hUser32 = DllOpen("user32.dll")
 
 $IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
 ; Ini file is kept within same dir as PUF.exe
@@ -28,15 +27,15 @@ $IniPath = StringFormat("%s\PUF.ini",@ScriptDir)
 If Not FileExists($IniPath) Then
    ; If file does not exist, creat one
    MsgBox(4096, "", "PUF.ini not found, using default.")
-   IniWrite($IniPath, "{f7}", "Name", "Xshell") 	; Write default info into ini file
-   IniWrite($IniPath, "{f7}", "Class", "Xshell4:MainWnd")
-   IniWrite($IniPath, "{f7}", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
-   IniWrite($IniPath, "{f8}", "Name", "cmd.exe")
-   IniWrite($IniPath, "{f8}", "Class", "ConsoleWindowClass")
-   IniWrite($IniPath, "{f8}", "Path", "C:\Windows\system32\cmd.exe")
-   IniWrite($IniPath, "{f9}", "Name", "emacs")
-   IniWrite($IniPath, "{f9}", "Class", "Emacs")
-   IniWrite($IniPath, "{f9}", "Path", "C:\cygwin\bin\emacs-w32.exe")
+   IniWrite($IniPath, "^x", "Name", "Xshell") 	; Write default info into ini file
+   IniWrite($IniPath, "^x", "Class", "Xshell4:MainWnd")
+   IniWrite($IniPath, "^x", "Path", "C:\Program Files\NetSarang\Xshell 4\Xshell.exe")
+   IniWrite($IniPath, "^m", "Name", "bash")
+   IniWrite($IniPath, "^m", "Class", "mintty")
+   IniWrite($IniPath, "^m", "Path", "C:\cygwin\bin\mintty -")
+   IniWrite($IniPath, "^e", "Name", "emacs")
+   IniWrite($IniPath, "^e", "Class", "Emacs")
+   IniWrite($IniPath, "^e", "Path", "C:\cygwin\bin\emacs-w32.exe")
 EndIf
 $IniSectionNames = IniReadSectionNames($IniPath)
 ; Read all section names from ini file. $IniSectionNames is an array.
@@ -115,7 +114,7 @@ Func _PUF()
 		    MsgBox(4096,"AutoIt Debug","No instance running, start one now.")
 	     EndIf
 	     Run($AppExePath)
-	     WinWait("[TITLE:$AppTitle]")
+	     WinWait($AppTitle)
       EndIf
    EndIf
 

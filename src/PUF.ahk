@@ -44,8 +44,8 @@ while true
 {
 	Sleep,250
 }
-; _PUF has to be put after a while loop
 ;;;;;;;;;;;;;;;;;;;;;;;; Pop Up Function Key Binding
+; _PUF has to be put after a while loop
 _PUF:
 	AppKey = %A_ThisHotkey%
 	If DEBUGFLAG
@@ -73,9 +73,17 @@ _PUF:
 		}
 		Else
 		{
-			if DEBUGFLAG
-				MsgBox, 4096,, The window is not minimized, minimize it!
-			WinMinimize, ahk_id %hWND%	; If not minimized, then minimize the window
+            If WinActive("ahk_id" . hWND) ; If active, minimize it!
+            {
+			    if DEBUGFLAG
+				    MsgBox, 4096,, The window is not minimized and active, minimize it!
+			    WinMinimize, ahk_id %hWND%
+            }
+            Else ; If not minimized and not active, then activate it!
+            {
+                WinActivate, ahk_id %hWND%
+            }
+
 		}
 	}
 	else  ; If desired process not running, create one

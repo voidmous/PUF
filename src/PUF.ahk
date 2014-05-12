@@ -1,11 +1,24 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
+#SingleInstance force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 DEBUGFLAG := False	; Output debug info if DEBUGFLAG is True
 IniPath :=  A_ScriptDir  . "\PUF.ini"
 SetTitleMatchMode, 2 	; Matching window whose title contain(not exactly equals to) WinTitle
+
+;;;;;;;;;;;;;;;;;;;;;;;; Tray Menu Settings
+Menu, TRAY, Tip, Pop Up Framework 	; Tray icon help info when hovering up
+Menu, TRAY, Icon, shield_and_swords.ico, 1, 1
+Menu, TRAY, NoStandard
+Menu, TRAY, add, Null
+Menu, TRAY, Disable, Null
+Menu, TRAY, Rename, Null, Ver 0.1 	; Display "Ver 0.1"
+Menu, TRAY, add, Debug 	; Debug mode toggle
+Menu, TRAY, add, Help 	; Display help info
+Menu, TRAY, add, Exit 	; Exit app
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;; Check If Ini File Exists
 If (NOT FileExist(IniPath))
@@ -98,18 +111,6 @@ return
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;; Tray Menu Settings
-
-Menu, TRAY, Tip, Pop Up Framework 	; Tray icon help info when hovering up
-Menu, TRAY, Icon
-Menu, TRAY, NoStandard
-Menu, TRAY, add, Null
-Menu, TRAY, Disable, Null
-Menu, TRAY, Rename, Null, Ver 0.1 	; Display "Ver 0.1"
-Menu, TRAY, add, Debug 	; Debug mode toggle
-Menu, TRAY, add, Help 	; Display help info
-Menu, TRAY, add, Exit 	; Exit app
-
 ;;;;;;;;;;;;;;;;;;;;;;; Tray Events Settings
 Debug:
 DEBUGFLAG := not DEBUGFLAG
@@ -121,6 +122,9 @@ Return
 
 Help:
 ; display help info
+; Open url with default browser
+; http://www.autohotkey.com/board/topic/30007-start-default-browser-with-blank-screen/
+Run, https://github.com/voidmous/PUF/tree/ahk-devel?url=about:blank
 Return
 
 Exit:

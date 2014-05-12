@@ -18,11 +18,12 @@ clean:
 
 install: bin
 	cp -f $(EXEC) "$(INSTALLDIR)"
+	cp -f $(ICO) "$(INSTALLDIR)"
 
 package:
 ifeq ($(wildcard pkg),)
 	@mkdir pkg
 endif
-	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src bin tool/Au3_Spy.exe LICENSE README.md
+	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src $(EXEC) $(ICO) tool/Au3_Spy.exe LICENSE README.md
 
 all: bin package

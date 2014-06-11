@@ -4,17 +4,24 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+VERSION := 0.1
+AUTHOR := voidmmous
+
 DEBUGFLAG := False	; Output debug info if DEBUGFLAG is True
 IniPath :=  A_ScriptDir  . "\PUF.ini"
 SetTitleMatchMode, 2 	; Matching window whose title contain(not exactly equals to) WinTitle
 
 ;;;;;;;;;;;;;;;;;;;;;;;; Tray Menu Settings
 Menu, TRAY, Tip, Pop Up Framework 	; Tray icon help info when hovering up
-Menu, TRAY, Icon, shield_and_swords.ico, 1, 1
+Menu, TRAY, Icon, PUF.ico, 1, 1
 Menu, TRAY, NoStandard
 Menu, TRAY, add, Null
 Menu, TRAY, Disable, Null
-Menu, TRAY, Rename, Null, Ver 0.1 	; Display "Ver 0.1"
+Menu, TRAY, Rename, Null, Ver %VERSION% ; Display Version
+Menu, CFG,  add, OpenDir
+Menu, CFG,  add, EditIni
+Menu, CFG,  add, ReloadIni
+Menu, TRAY, add, Config, :CFG ; Add submenu config
 Menu, TRAY, add, Debug 	; Debug mode toggle
 Menu, TRAY, add, Help 	; Display help info
 Menu, TRAY, add, Exit 	; Exit app
@@ -35,31 +42,37 @@ If (NOT FileExist(IniPath))
 	IniWrite, C:\Program Files\NetSarang\Xshell 4\Xshell.exe, %IniPath%, RCtrl, ExePath
 }
 
-;;;;;;;;;;;;;;;;;;;;;;;; Read Hot Keys And Bind Them All
-IniRead, Keys, %IniPath%
-StringReplace, Keys, Keys, `n, %A_Space%, All  ; ` escapses "\n"
-; To split string with a substring delimeter, you've to replace substring with one character
-StringSplit, KeysArray, Keys, %A_Space%
-If DEBUGFLAG
-	MsgBox, 4096,, %KeysArray0% %KeysArray1% %KeysArray2%
-
-i := 1
-While (i != KeysArray0+1)
-{	
-	KeyName := KeysArray%i%
-	HotKey, %KeyName%, _PUF
-	If DEBUGFLAG
-		MsgBox, 4096,, HotKey sucessfully bind
-	i := i+1
-}
-
+BindKeys(IniPath)
 while true
 {
 	Sleep,250
 }
-;;;;;;;;;;;;;;;;;;;;;;;; Pop Up Function Key Binding
-; _PUF has to be put after a while loop
-_PUF:
+
+BindKeys(IniPath)
+{
+	;;;;;;;;;;;;;;;;;;;;;;;; Read Hot Keys And Bind Them All
+	IniRead, Keys, %IniPath%
+	StringReplace, Keys, Keys, `n, %A_Space%, All  ; ` escapses "\n"
+	; To split string with a substring delimeter, you've to replace substring with one character
+	StringSplit, KeysArray, Keys, %A_Space%
+	If DEBUGFLAG
+		MsgBox, 4096,, %KeysArray0% %KeysArray1% %KeysArray2%
+
+	i := 1
+	While (i != KeysArray0+1)
+	{	
+		KeyName := KeysArray%i%
+		HotKey, %KeyName%, PUF
+		If	DEBUGFLAG
+			MsgBox, 4096,, HotKey sucessfully bind
+		i := i+1
+	}
+}
+
+PUF:
+	;; Pop Up Function
+    ; Hotkey must bind with a label, function is not allowed
+	; PUF has to be put after a while loop
 	AppKey = %A_ThisHotkey%
 	If DEBUGFLAG
 		MsgBox,4096,, "Hotkey detected " . %AppKey%
@@ -112,6 +125,18 @@ return
 
 
 ;;;;;;;;;;;;;;;;;;;;;;; Tray Events Settings
+OpenDir:
+Run, explorer %A_ScriptDir%
+Return
+
+EditIni:
+Run, open %IniPath%
+Return
+
+ReloadIni:
+BindKeys(IniPath)
+Return
+
 Debug:
 DEBUGFLAG := not DEBUGFLAG
 If DEBUGFLAG
@@ -121,7 +146,6 @@ Else
 Return
 
 Help:
-; display help info
 ; Open url with default browser
 ; http://www.autohotkey.com/board/topic/30007-start-default-browser-with-blank-screen/
 Run, https://github.com/voidmous/PUF/tree/ahk-devel?url=about:blank

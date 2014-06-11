@@ -1,7 +1,7 @@
 SRC = src/PUF.ahk
 EXEC = bin/PUF.exe
 CC = tool/Ahk2Exe.exe
-ICO = res/shield_and_swords.ico
+ICO = res/PUF.ico
 # INSTALLDIR = $(shell cygpath -P)/Startup/ # Windows启动文件夹
 INSTALLDIR = $(shell cygpath D\:/Program\ Files/PUF/)
 SHA1 = $(shell git rev-parse HEAD)
@@ -12,6 +12,7 @@ ifeq ($(wildcard bin),)
 	@mkdir bin
 endif
 	$(CC) /in $(SRC) /out $(EXEC) /icon $(ICO) /bin tool/AutoHotkeySC.bin
+	cp -f $(ICO) bin/
 
 clean:
 	rm -rf bin/ pkg/
@@ -24,6 +25,6 @@ package:
 ifeq ($(wildcard pkg),)
 	@mkdir pkg
 endif
-	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src $(EXEC) $(ICO) tool/Au3_Spy.exe LICENSE README.md
+	tar -zcvf pkg/PUF_$(BRANCHN).tar.gz src bin tool/Au3_Spy.exe LICENSE README.md
 
 all: bin package

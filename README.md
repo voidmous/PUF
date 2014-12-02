@@ -1,7 +1,13 @@
 # PUF
 
+<hr>
+<hr>
+<hr>
 ## Notice!
 Au3-devel branch is currently abandoned since I've decided to use AHK_L as dev-lang. If you're more familiar with AutoIt and willing to write some code based on this project, then this branch may be your choice. At the time of writing this `Notice!`, au3-devel branch is usable, stable and keeps basic feature needed.
+<hr>
+<hr>
+<hr>
 ## What is it?
 
 PUF is Pop Up Framework, which intends to pop up desired program window with keyboard 

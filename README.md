@@ -19,15 +19,19 @@ Of course you can make life easier in other ways like:
 
 but a third option is always welcomed, isn't it?
 
-## How to do?
+## How to run?
+
+### Compilation
+
+* On windows, run `makefile.bat`
+* On cygwin, run `make package` to generate tar.gz package for installation, `make clean` to remove generated files.
 
 ### Installation
 
-Copy the pre-compiled `bin/puf.exe` to wherever you like and double-click, then you have the ablility to call
+Unzip the generated tar.gz package and run `PUF*.exe` according to your CPU architecture, then you have the ablility to call
 
-* `Xshell` with `F7`
+* `Notepad` with `F7`
 * `cmd.exe` with `F8`
-* `Evernote` with `F9`
 
 as with default configuration if that is correct with your case. Or you can install AHK and directly run the script without compilation(more convenient for debugging).
 
@@ -38,8 +42,8 @@ The configuration is stored all in `PUF.ini`. Modify it as following example:
 
 ```ini
 [{f7}]
-Name=Xshell
-Path=C:\Program Files\NetSarang\Xshell 4\Xshell.exe
+Name=Notepad
+Path=C:\Windows\System32\notepad.exe
 [{f8}]
 Name=cmd.exe
 Path=C:\Windows\system32\cmd.exe
@@ -47,10 +51,7 @@ Path=C:\Windows\system32\cmd.exe
 As you can see, section name is set to hotkey name e.g. [{f7}], each section has two keys
 `Name` (Program window title substring for window searching) and `Path` (Absolute path of executable file). Most importanly, do write the correct shortcut key name, see [Send key list](http://www.autoitscript.com/autoit3/docs/appendix/SendKeys.htm) for more information.
 
-### Compilation
 
-* In windows, run `makefile.bat` will generate `bin\PUF.exe`.
-* In cygwin, run `make bin`, you may modify `Makefile` to meet your own customization.
 
 ## FAQ
 

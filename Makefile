@@ -26,7 +26,7 @@ bin64: # Unicode 64bit binary
 	$(CC) /in $(SRC) /out $(EXEC64) /icon $(ICO) /bin "tool/Unicode 64-bit.bin"
 
 clean:
-	rm -rf $(EXEC) $(EXEC32) $(EXEC64) pkg/
+	rm -rf $(EXEC_ANSI) $(EXEC32) $(EXEC64) pkg/
 
 install: bin
 	cp -f $(EXEC) "$(INSTALLDIR)"

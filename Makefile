@@ -32,7 +32,7 @@ install: bin
 	cp -f $(EXEC) "$(INSTALLDIR)"
 	cp -f $(ICO) "$(INSTALLDIR)"
 
-package:
+package: bin_ansi bin32 bin64
 ifeq ($(wildcard pkg),) # make directory pkg/
 	@mkdir pkg
 endif

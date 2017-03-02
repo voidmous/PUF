@@ -64,3 +64,11 @@ If you don't know the key name, take a quick look at
 
 Watch the title column of the window, or run `tool\Au3Info.exe` to see
 more comprehensive properties.
+
+### Do NOT use a starter command before real executable file
+
+This may interfere AHK locating the target window
+
+### Run As Administrator
+
+If you run PUF as Administrator, then all application you start with PUF will be run as Administrator automatically.
